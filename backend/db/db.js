@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',  // Default XAMPP username
     password: '',  // Default XAMPP password (usually empty)
-    database: 'bannerDB'
+    database: 'bannerdb'
 });
 
 // Connect to the database

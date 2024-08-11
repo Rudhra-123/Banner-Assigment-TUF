@@ -5,13 +5,27 @@ const Dashboard = ({ bannerContent, setBannerContent, toggleBanner }) => {
   const [timer, setTimer] = useState(bannerContent.timer);
   const [link, setLink] = useState(bannerContent.link);
 
+
+
+  // State to manage button click feedback
+  const [buttonClicked, setButtonClicked] = useState('');
+
   const handleUpdate = () => {
+    // Update the banner content in the parent component and the backend
     setBannerContent({ description, timer, link });
+    setButtonClicked('update');
+    setTimeout(() => setButtonClicked(''), 200); // Reset button feedback after 200ms
+  };
+
+  const handleToggle = () => {
+    toggleBanner();
+    setButtonClicked('toggle');
+    setTimeout(() => setButtonClicked(''), 200); // Reset button feedback after 200ms
   };
 
   return (
     <div className="bg-white p-4 rounded shadow-md w-full max-w-md">
-      <h2 className="text-xl font-bold mb-4">Banner Settings</h2>
+      <h2 className="text-xl font-bold mb-4">Banner Settings</h2>     
       <div className="mb-4">
         <label className="block text-gray-700">Description</label>
         <input
@@ -40,8 +54,18 @@ const Dashboard = ({ bannerContent, setBannerContent, toggleBanner }) => {
         />
       </div>
       <div className="flex justify-between items-center">
-        <button onClick={handleUpdate} className="bg-blue-500 text-white px-4 py-2 rounded">Update</button>
-        <button onClick={toggleBanner} className="bg-red-500 text-white px-4 py-2 rounded">Toggle Banner</button>
+        <button
+          onClick={handleUpdate}
+          className={`px-4 py-2 rounded ${buttonClicked === 'update' ? 'bg-blue-700' : 'bg-blue-500'} text-white transition-colors duration-200`}
+        >
+          Update
+        </button>
+        <button
+          onClick={handleToggle}
+          className={`px-4 py-2 rounded ${buttonClicked === 'toggle' ? 'bg-red-700' : 'bg-red-500'} text-white transition-colors duration-200`}
+        >
+          Toggle Banner
+        </button>
       </div>
     </div>
   );
