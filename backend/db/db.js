@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
     database: 'bannerdb'
 });
 
-// Connect to the database
+
 connection.connect((err) => {
     if (err) {
         console.error('Error connecting to the database:', err);

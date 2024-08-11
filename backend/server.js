@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2'); // Use mysql2 instead of mysql
+const mysql = require('mysql2');
 
 const app = express();
 app.use(cors());
@@ -10,23 +10,19 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'bannerdb',
+  database: 'bannerDB',
 });
 
 db.connect((err) => {
   if (err) {
     console.error('Error connecting to MySQL:', err);
-    process.exit(1); // Exit process with failure code
+    process.exit(1);
   }
   console.log('MySQL Connected...');
 });
 
-app.get('/', (req, res) => {
-  res.send('Welcome to the Banner API!');
-});
-
 app.get('/banner', (req, res) => {
-  db.query('SELECT * FROM banner ORDER BY id DESC LIMIT 1', (err, result) => {
+  db.query('SELECT * FROM banner LIMIT 1', (err, result) => {
     if (err) {
       console.error('Error fetching banner:', err);
       return res.status(500).send('Internal Server Error');
@@ -37,17 +33,27 @@ app.get('/banner', (req, res) => {
 
 app.post('/banner', (req, res) => {
   const { description, timer, link } = req.body;
-  console.log('Request body:', req.body); // Log request data for debugging
-
   db.query(
-    `INSERT INTO banner (description, timer, link) VALUES (?, ?, ?)`,
+    'UPDATE banner SET description = ?, timer = ?, link = ? WHERE id = 1',
     [description, timer, link],
     (err, result) => {
       if (err) {
-        console.error('Error inserting banner:', err);
+        console.error('Error updating banner:', err);
         return res.status(500).send('Internal Server Error');
       }
-      console.log('Insert result:', result); // Log result for debugging
+      res.send(result);
+    }
+  );
+});
+
+app.post('/toggleBanner', (req, res) => {
+  db.query(
+    'UPDATE banner SET visible = !visible WHERE id = 1',
+    (err, result) => {
+      if (err) {
+        console.error('Error toggling banner visibility:', err);
+        return res.status(500).send('Internal Server Error');
+      }
       res.send(result);
     }
   );

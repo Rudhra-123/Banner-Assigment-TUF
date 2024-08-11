@@ -1,9 +1,8 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Banner from './components/Banner';
 import Dashboard from './components/Dashboard';
 import axios from 'axios';
 import Logo from './components/Logo';
-
 
 function App() {
   const [bannerVisible, setBannerVisible] = useState(true);
@@ -36,6 +35,7 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <Logo />
+
       {bannerVisible && (
         <Banner
           description={bannerContent.description}
@@ -44,16 +44,19 @@ function App() {
           onClose={() => setBannerVisible(false)}
         />
       )}
-      <Dashboard
-        bannerContent={bannerContent}
-        setBannerContent={updateBanner}
-        toggleBanner={() => setBannerVisible((prev) => !prev)}
-      />
-       <footer className="mt-8 text-gray-600">
+
+      <div className={`relative w-full ${bannerVisible ? 'blur-sm' : ''}`}>
+        <Dashboard
+          bannerContent={bannerContent}
+          setBannerContent={updateBanner}
+          toggleBanner={() => setBannerVisible((prev) => !prev)}
+        />
+      </div>
+
+      <footer className="mt-8 text-gray-600">
         Made by Rudhra Pratap Singh
       </footer>
     </div>
-    
   );
 }
 
